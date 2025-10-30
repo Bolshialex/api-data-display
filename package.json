@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Lizock.github.io/api-data-display",
+  "homepage": "https://bolshialex.github.io/api-data-display",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
