@@ -4,6 +4,7 @@ import Footer from "./components/Footer.jsx";
 import Moves from "./components/Moves.jsx";
 import Games from "./components/Games.jsx";
 import PokemonStats from "./components/PokemonStats.jsx";
+import "./style.css";
 
 export default function App() {
   const [pokemonList, setPokemonList] = useState([]);
@@ -127,13 +128,11 @@ export default function App() {
     const fetchSinglePokemon = async () => {
       console.log(formData);
       try {
-        const res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${formData.pokeName}`
-        );
-        if (!res.ok) throw new Error("Failed to fetch Pokémon list");
-        const data = await res.json();
-        console.log(data);
-        setPokemonList(data.results);
+        for (let i = 0; i < pokemonList.length; i++) {
+          if (pokemonList[i].name === formData.pokeName) {
+            setCurrentIndex(i);
+          }
+        }
       } catch (err) {
         setError(err.message);
       }
