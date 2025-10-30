@@ -122,7 +122,7 @@ export default function App() {
         if (!res.ok) throw new Error("Failed to fetch Pokémon list");
         const data = await res.json();
         console.log(data);
-        setPokemonList(data.results);
+        setCurrentData(data.results);
       } catch (err) {
         setError(err.message);
       }
