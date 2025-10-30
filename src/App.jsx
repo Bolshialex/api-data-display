@@ -4,6 +4,7 @@ import Footer from "./components/Footer.jsx";
 import Moves from "./components/Moves.jsx";
 import Games from "./components/Games.jsx";
 import PokemonStats from "./components/PokemonStats.jsx";
+import "./style.css";
 
 export default function App() {
   const [pokemonList, setPokemonList] = useState([]);
