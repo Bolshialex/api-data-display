@@ -100,6 +100,17 @@ export default function App() {
     setCurrentIndex((prev) => (prev + 1) % pokemonList.length);
   };
 
+  const [show, setShow] = useState(false);
+  const showMoves = () => {
+    return (
+      <div>
+        <h4>Moves:</h4>
+        <Moves moves={currentData.moves} />
+      </div>
+      
+    )
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -188,9 +199,8 @@ export default function App() {
 
       <PokemonStats data={currentData} canEvolve={canEvolve} />
       <Games games={currentData.game_indices} />
-      <h4>Moves:</h4>
-      <Moves moves={currentData.moves} />
-
+      <button onClick={() => setShow(prevValue => !prevValue)}>Show {currentData.name.toUpperCase()} moves</button>
+      {show && showMoves()}
       
       <Footer />
     </div>
