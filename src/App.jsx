@@ -184,13 +184,14 @@ export default function App() {
       </div>
 
       <button onClick={() => setShowBack((prev) => !prev)}>Flip Sprite</button>
+      <button onClick={nextPokemon}>Next Pokémon</button>
 
       <PokemonStats data={currentData} canEvolve={canEvolve} />
       <Games games={currentData.game_indices} />
       <h4>Moves:</h4>
       <Moves moves={currentData.moves} />
 
-      <button onClick={nextPokemon}>Next Pokémon</button>
+      
       <Footer />
     </div>
   );
