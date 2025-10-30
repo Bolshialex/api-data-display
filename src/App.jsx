@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Moves from "./components/Moves.jsx";
@@ -11,6 +11,7 @@ export default function App() {
   const [currentData, setCurrentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [formData, setFormData] = useState("");
 
   // Evolution state
   const [canEvolve, setCanEvolve] = useState(null);
@@ -22,7 +23,9 @@ export default function App() {
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0");
+        const res = await fetch(
+          "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
+        );
         if (!res.ok) throw new Error("Failed to fetch Pokémon list");
         const data = await res.json();
         setPokemonList(data.results);
@@ -34,6 +37,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    console.log(pokemonList);
     if (!pokemonList.length) return;
     const fetchData = async () => {
       setLoading(true);
@@ -81,7 +85,6 @@ export default function App() {
         } else {
           setEvolvesInto(null);
         }
-
       } catch (err) {
         console.error("Evolution fetch failed", err);
         setCanEvolve(null);
@@ -97,34 +100,90 @@ export default function App() {
     setCurrentIndex((prev) => (prev + 1) % pokemonList.length);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    console.log(formData);
+  };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const fetchSinglePokemon = async () => {
+      console.log(formData);
+      try {
+        const res = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${formData.pokeName}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch Pokémon list");
+        const data = await res.json();
+        console.log(data);
+        setPokemonList(data.results);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    fetchSinglePokemon();
+    console.log(pokemonList);
+  }
+
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
   if (loading || !currentData) return <p>Loading data...</p>;
 
   return (
     <div className="pokemon">
       <Header />
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="pokeName">
+          Pokemon Name:
+          <input
+            type="text"
+            name="pokeName"
+            id="pokeName"
+            onChange={handleChange}
+          />
+        </label>
+
+        <button>Find Pokemon</button>
+      </form>
+
       <h2>{currentData.name.toUpperCase()}</h2>
 
-      {canEvolve !== null && (
-        evolvesInto 
-          ? <p>{currentData.name.toUpperCase()} evolves into {evolvesInto}</p>
-          : <p>{currentData.name.toUpperCase()} does not evolve</p>
-      )}
+      {canEvolve !== null &&
+        (evolvesInto ? (
+          <p>
+            {currentData.name.toUpperCase()} evolves into {evolvesInto}
+          </p>
+        ) : (
+          <p>{currentData.name.toUpperCase()} does not evolve</p>
+        ))}
 
       <div className="sprites">
         <img
-          src={showBack ? currentData.sprites.back_default : currentData.sprites.front_default}
+          src={
+            showBack
+              ? currentData.sprites.back_default
+              : currentData.sprites.front_default
+          }
           alt={currentData.name}
           style={{ width: "150px" }}
         />
         <img
-          src={showBack ? currentData.sprites.back_shiny : currentData.sprites.front_shiny}
+          src={
+            showBack
+              ? currentData.sprites.back_shiny
+              : currentData.sprites.front_shiny
+          }
           alt={`${currentData.name} shiny`}
           style={{ width: "150px" }}
         />
       </div>
 
-      <button onClick={() => setShowBack(prev => !prev)}>Flip Sprite</button>
+      <button onClick={() => setShowBack((prev) => !prev)}>Flip Sprite</button>
 
       <PokemonStats data={currentData} canEvolve={canEvolve} />
       <Games games={currentData.game_indices} />
