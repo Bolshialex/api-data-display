@@ -97,6 +97,7 @@ input {
   border: 1px solid black;
   background-color: inherit;
   transition: 250ms;
+  margin: 5px;
 }
 
 button:hover {
