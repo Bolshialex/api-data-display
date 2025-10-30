@@ -108,9 +108,8 @@ export default function App() {
         <h4>Moves:</h4>
         <Moves moves={currentData.moves} />
       </div>
-      
-    )
-  }
+    );
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -197,10 +196,12 @@ export default function App() {
       <button onClick={nextPokemon}>Next Pokémon</button>
 
       <PokemonStats data={currentData} canEvolve={canEvolve} />
-      <Games games={currentData.game_indices} />
-      <button onClick={() => setShow(prevValue => !prevValue)}>Show {currentData.name.toUpperCase()} moves</button>
+      <button onClick={() => setShow((prevValue) => !prevValue)}>
+        Show {currentData.name.toUpperCase()} moves
+      </button>
       {show && showMoves()}
-      
+      <Games games={currentData.game_indices} />
+
       <Footer />
     </div>
   );
